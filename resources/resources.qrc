@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/data">
+        <file alias="consultant_tree.json">data/consultant_tree.json</file>
+    </qresource>
+</RCC>
