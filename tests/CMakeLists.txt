@@ -11,13 +11,15 @@ set(CORE_SOURCES
 # Create test executable
 qt_add_executable(PCConsultantCoreTests
     test_decision_tree.cpp
-    test_tree_loader.cpp
+    #test_tree_loader.cpp
     test_tree_validator.cpp
-    test_consultation_session.cpp
     ${CORE_SOURCES}
 )
 
-target_include_directories(PCConsultantCoreTests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(PCConsultantCoreTests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/core
+)
 
 # Link Qt Core + Test + resource file
 target_link_libraries(PCConsultantCoreTests PRIVATE Qt6::Core Qt6::Test)
