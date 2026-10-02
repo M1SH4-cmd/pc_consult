@@ -44,6 +44,4 @@ target_link_libraries(PCConsultant PRIVATE Qt6::Widgets)
 
 enable_testing()
 
-if(BUILD_TESTING)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)

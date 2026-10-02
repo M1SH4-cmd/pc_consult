@@ -1,33 +1,95 @@
-find_package(Qt6 6.11 REQUIRED COMPONENTS Test)
+cmake_minimum_required(VERSION 3.21)
 
-# Collect only Core sources
-set(CORE_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/core/DecisionTree.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/TreeDataLoader.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/TreeValidator.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/ConsultationSession.cpp
+project(PCConsultantTests
+    VERSION 0.1.0
+    DESCRIPTION "Tests for PCConsultant Core"
+    LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package(Qt6 6.11 REQUIRED COMPONENTS Test Core)
+
+# Test DecisionTree
+add_executable(test_decision_tree
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_decision_tree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionTree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
 )
 
-# Create test executable
-qt_add_executable(PCConsultantCoreTests
-    test_decision_tree.cpp
-    #test_tree_loader.cpp
-    test_tree_validator.cpp
-    ${CORE_SOURCES}
+target_include_directories(test_decision_tree PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
+target_link_libraries(test_decision_tree PRIVATE Qt6::Test)
+
+add_test(NAME test_decision_tree COMMAND test_decision_tree)
+
+# Test TreeDataLoader
+add_executable(test_tree_loader
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_tree_loader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/TreeDataLoader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionTree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../resources/resources.qrc
 )
 
-target_include_directories(PCConsultantCoreTests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src/core
+target_include_directories(test_tree_loader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
+target_link_libraries(test_tree_loader PRIVATE Qt6::Test Qt6::Core)
+
+add_test(NAME test_tree_loader COMMAND test_tree_loader)
+
+# Test TreeValidator
+add_executable(test_tree_validator
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_tree_validator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/TreeValidator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionTree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
 )
 
-# Link Qt Core + Test + resource file
-target_link_libraries(PCConsultantCoreTests PRIVATE Qt6::Core Qt6::Test)
-qt_add_resources(PCConsultantCoreTests "resources" PREFIX "/" BASE "${CMAKE_SOURCE_DIR}" FILES "${CMAKE_SOURCE_DIR}/resources/data/consultant_tree.json")
+target_include_directories(test_tree_validator PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
-# Register with CTest
-add_test(NAME PCConsultantCoreTests COMMAND PCConsultantCoreTests)
-set_tests_properties(PCConsultantCoreTests PROPERTIES
-    ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+target_link_libraries(test_tree_validator PRIVATE Qt6::Test)
+
+add_test(NAME test_tree_validator COMMAND test_tree_validator)
+
+# Test ConsultationSession
+add_executable(test_consultation_session
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_consultation_session.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/ConsultationSession.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionTree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
 )
+
+target_include_directories(test_consultation_session PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
+target_link_libraries(test_consultation_session PRIVATE Qt6::Test)
+
+add_test(NAME test_consultation_session COMMAND test_consultation_session)
+
+# Integration test
+add_executable(test_integration
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_integration.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/TreeDataLoader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/TreeValidator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/ConsultationSession.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionTree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../resources/resources.qrc
+)
+
+target_include_directories(test_integration PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
+target_link_libraries(test_integration PRIVATE Qt6::Test Qt6::Core)
+
+add_test(NAME test_integration COMMAND test_integration)

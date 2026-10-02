@@ -1,75 +1,104 @@
 #include <QtTest/QtTest>
-
 #include "core/DecisionTree.h"
-#include "test_helpers.h"
+#include "core/DecisionNode.h"
+#include "core/NodeId.h"
 
-class DecisionTreeTest : public QObject
+using namespace core;
+
+namespace
+{
+
+DecisionNode makeQuestion(const NodeId& id, const std::string& text, const NodeId& yes,
+                          const NodeId& no)
+{
+    DecisionNode node;
+    node.id = id;
+    node.kind = NodeKind::Question;
+    node.text = text;
+    node.yesTarget = yes;
+    node.noTarget = no;
+    return node;
+}
+
+DecisionNode makeResult(const NodeId& id, const std::string& text)
+{
+    DecisionNode node;
+    node.id = id;
+    node.kind = NodeKind::Result;
+    node.text = text;
+    return node;
+}
+
+}
+
+class TestDecisionTree : public QObject
 {
     Q_OBJECT
 
 private slots:
-    void testRootId();
-    void testSize();
-    void testContains();
-    void testFind();
-    void testAt();
-    void testInvalidRoot();
-    void testNodesReadOnly();
+    void testRootId()
+    {
+        NodeId rootId("Q01");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")}
+        };
+        DecisionTree tree(rootId, nodes);
+        QCOMPARE(QString::fromStdString(tree.rootId()), QString("Q01"));
+    }
+
+    void testSize()
+    {
+        NodeId rootId("Q01");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")},
+            {"Q02", makeQuestion("Q02", "Second question", "Q03", "Q49")}
+        };
+        DecisionTree tree(rootId, nodes);
+        QCOMPARE(tree.size(), static_cast<std::size_t>(2));
+    }
+
+    void testContains()
+    {
+        NodeId rootId("Q01");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")}
+        };
+        DecisionTree tree(rootId, nodes);
+        QVERIFY(tree.contains("Q01"));
+        QVERIFY(!tree.contains("Q99"));
+    }
+
+    void testFind()
+    {
+        NodeId rootId("Q01");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")}
+        };
+        DecisionTree tree(rootId, nodes);
+        QVERIFY(tree.find("Q01") != nullptr);
+        QVERIFY(tree.find("Q99") == nullptr);
+    }
+
+    void testAt()
+    {
+        NodeId rootId("Q01");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")}
+        };
+        DecisionTree tree(rootId, nodes);
+        QCOMPARE(QString::fromStdString(tree.at("Q01").text), QString("Root question"));
+        QVERIFY_EXCEPTION_THROWN(tree.at("Q99"), std::out_of_range);
+    }
+
+    void testInvalidRootConstructor()
+    {
+        NodeId rootId("Q99");
+        DecisionTree::NodeMap nodes = {
+            {"Q01", makeQuestion("Q01", "Root question", "Q02", "Q48")}
+        };
+        QVERIFY_EXCEPTION_THROWN(DecisionTree(rootId, nodes), std::invalid_argument);
+    }
 };
 
-void DecisionTreeTest::testRootId()
-{
-    const core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text")});
-    QCOMPARE(tree.rootId(), "Q1");
-}
-
-void DecisionTreeTest::testSize()
-{
-    const core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text"),
-         testing_helpers::makeResult("R1", "result")});
-    QCOMPARE(tree.size(), 2);
-}
-
-void DecisionTreeTest::testContains()
-{
-    const core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text")});
-    QVERIFY(tree.contains("Q1"));
-    QVERIFY(!tree.contains("MISSING"));
-}
-
-void DecisionTreeTest::testFind()
-{
-    const core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text")});
-    QVERIFY(tree.find("Q1") != nullptr);
-    QVERIFY(tree.find("MISSING") == nullptr);
-}
-
-void DecisionTreeTest::testAt()
-{
-    const core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text")});
-    QCOMPARE(tree.at("Q1").id, "Q1");
-    QVERIFY_EXCEPTION_THROWN(tree.at("MISSING"), std::out_of_range);
-}
-
-void DecisionTreeTest::testInvalidRoot()
-{
-    QVERIFY_EXCEPTION_THROWN(
-        testing_helpers::makeTree("MISSING",
-            {testing_helpers::makeQuestion("Q1", "text")}),
-        std::invalid_argument);
-}
-
-void DecisionTreeTest::testNodesReadOnly()
-{
-    core::DecisionTree tree = testing_helpers::makeTree("Q1",
-        {testing_helpers::makeQuestion("Q1", "text")});
-    const core::DecisionTree::NodeMap& nodes = tree.nodes();
-    QVERIFY_EXCEPTION_THROWN(nodes.clear(), std::exception);
-}
-
-QTEST_APPLESS_MAIN(DecisionTreeTest)
+QTEST_MAIN(TestDecisionTree)
+#include "test_decision_tree.moc"
