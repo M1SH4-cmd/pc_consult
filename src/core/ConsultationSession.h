@@ -7,6 +7,7 @@
 #include "core/Answer.h"
 #include "core/DecisionNode.h"
 #include "core/DecisionTree.h"
+#include "core/HistoryEntry.h"
 #include "core/NodeId.h"
 
 namespace core
@@ -42,6 +43,11 @@ public:
         return m_history.size();
     }
 
+    [[nodiscard]] const std::vector<HistoryEntry>& history() const noexcept
+    {
+        return m_history;
+    }
+
     [[nodiscard]] bool answer(Answer answer);
 
     [[nodiscard]] bool answerYes()
@@ -61,7 +67,7 @@ public:
 private:
     const DecisionTree& m_tree;
     NodeId m_currentId;
-    std::vector<NodeId> m_history;
+    std::vector<HistoryEntry> m_history;
 };
 
 }

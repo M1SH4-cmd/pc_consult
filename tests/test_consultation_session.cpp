@@ -65,6 +65,13 @@ private slots:
         QVERIFY(session.answerYes());
         QCOMPARE(QString::fromStdString(session.currentId()), QString("Q02"));
         QCOMPARE(session.historySize(), static_cast<std::size_t>(1));
+
+        // Verify history entry
+        const auto& hist = session.history();
+        QCOMPARE(hist.size(), static_cast<std::size_t>(1));
+        QCOMPARE(QString::fromStdString(hist[0].nodeId), QString("Q01"));
+        QCOMPARE(hist[0].answer, Answer::Yes);
+        QCOMPARE(QString::fromStdString(hist[0].targetId), QString("Q02"));
     }
 
     void testNoTransition()
@@ -79,6 +86,13 @@ private slots:
         QVERIFY(session.answerNo());
         QCOMPARE(QString::fromStdString(session.currentId()), QString("Q48"));
         QCOMPARE(session.historySize(), static_cast<std::size_t>(1));
+
+        // Verify history entry
+        const auto& hist = session.history();
+        QCOMPARE(hist.size(), static_cast<std::size_t>(1));
+        QCOMPARE(QString::fromStdString(hist[0].nodeId), QString("Q01"));
+        QCOMPARE(hist[0].answer, Answer::No);
+        QCOMPARE(QString::fromStdString(hist[0].targetId), QString("Q48"));
     }
 
     void testBackTransition()

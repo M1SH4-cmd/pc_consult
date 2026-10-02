@@ -1,0 +1,374 @@
+/* PCConsultant - themed stylesheet template.
+   ThemeManager substitutes @tokens before applying. */
+
+QMainWindow#mainWindow,
+QWidget#centralWidget,
+QDialog#settingsDialog {
+    background-color: @bg;
+}
+
+QLabel {
+    color: @text;
+}
+
+/* ---------- Header ---------- */
+
+QWidget#headerBar {
+    background-color: transparent;
+}
+
+QLabel#appTitle {
+    color: @text;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* ---------- Content card ---------- */
+
+QFrame#contentCard {
+    background-color: @surface;
+    border: 1px solid @border;
+    border-radius: 18px;
+}
+
+/* ---------- Context / question labels ---------- */
+
+QLabel#contextLabel {
+    color: @textMuted;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+QLabel#questionLabel {
+    color: @text;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+/* ---------- Scroll area ---------- */
+
+QScrollArea#textArea {
+    background: transparent;
+    border: none;
+}
+
+QScrollArea#textArea > QWidget > QWidget {
+    background: transparent;
+}
+
+QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+    margin: 2px 0 2px 0;
+}
+
+QScrollBar::handle:vertical {
+    background: @border;
+    border-radius: 5px;
+    min-height: 32px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: @textMuted;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+    background: transparent;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+/* ---------- Primary decision buttons ---------- */
+
+QPushButton#yesButton,
+QPushButton#noButton {
+    font-size: 16px;
+    font-weight: 600;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 12px;
+}
+
+QPushButton#yesButton {
+    color: #FFFFFF;
+    background-color: @accent;
+    border: 1px solid @accent;
+}
+
+QPushButton#yesButton:hover {
+    background-color: @accentHover;
+    border-color: @accentHover;
+}
+
+QPushButton#yesButton:pressed {
+    background-color: @accentPressed;
+    border-color: @accentPressed;
+}
+
+QPushButton#noButton {
+    color: @text;
+    background-color: @surface;
+    border: 1px solid @border;
+}
+
+QPushButton#noButton:hover {
+    background-color: @hover;
+    border-color: @textMuted;
+}
+
+QPushButton#noButton:pressed {
+    background-color: @pressed;
+    border-color: @textMuted;
+}
+
+/* ---------- Secondary / ghost navigation ---------- */
+
+QPushButton#backButton,
+QPushButton#restartButton {
+    font-size: 14px;
+    font-weight: 500;
+    color: @textMuted;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    min-height: 44px;
+    padding: 0 18px;
+}
+
+QPushButton#backButton:hover,
+QPushButton#restartButton:hover {
+    color: @text;
+    background-color: @hover;
+}
+
+QPushButton#backButton:pressed,
+QPushButton#restartButton:pressed {
+    background-color: @pressed;
+}
+
+/* ---------- Settings trigger button ---------- */
+
+QToolButton#settingsButton {
+    color: @textMuted;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 6px 14px;
+    min-height: 34px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QToolButton#settingsButton:hover {
+    color: @text;
+    background-color: @hover;
+    border-color: @border;
+}
+
+QToolButton#settingsButton:pressed {
+    background-color: @pressed;
+}
+
+/* ---------- Settings dialog: sidebar ---------- */
+
+QListWidget#settingsNav {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 14px;
+}
+
+QListWidget#settingsNav::item {
+    color: @textMuted;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 3px 6px;
+}
+
+QListWidget#settingsNav::item:hover {
+    background-color: @hover;
+    color: @text;
+}
+
+QListWidget#settingsNav::item:selected {
+    background-color: @accent;
+    color: #FFFFFF;
+}
+
+QFrame#settingsSidebar {
+    background-color: @surface;
+    border: 1px solid @border;
+    border-radius: 16px;
+}
+
+QFrame#settingsContent {
+    background-color: @surface;
+    border: 1px solid @border;
+    border-radius: 16px;
+}
+
+QLabel#pageTitle {
+    color: @text;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+QLabel#fieldLabel {
+    color: @text;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+QLabel#fieldHint {
+    color: @textMuted;
+    font-size: 12px;
+}
+
+/* ---------- Settings controls ---------- */
+
+QComboBox, QFontComboBox {
+    color: @text;
+    background-color: @bg;
+    border: 1px solid @border;
+    border-radius: 10px;
+    padding: 8px 12px;
+    min-height: 22px;
+}
+
+QComboBox:hover, QFontComboBox:hover {
+    border-color: @textMuted;
+}
+
+QComboBox::drop-down, QFontComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox QAbstractItemView {
+    color: @text;
+    background-color: @surface;
+    border: 1px solid @border;
+    selection-background-color: @accent;
+    selection-color: #FFFFFF;
+    outline: none;
+}
+
+/* Accent color chips */
+
+QToolButton#accentChip {
+    border: 2px solid @border;
+    border-radius: 12px;
+    min-width: 72px;
+    min-height: 40px;
+    color: @text;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QToolButton#accentChip:hover {
+    border-color: @textMuted;
+}
+
+QToolButton#accentChip[selected="true"] {
+    border: 2px solid @accent;
+    background-color: @accentSoft;
+}
+
+/* ---------- Settings footer ---------- */
+
+QPushButton#closeSettingsButton {
+    color: #FFFFFF;
+    background-color: @accent;
+    border: 1px solid @accent;
+    border-radius: 10px;
+    min-height: 40px;
+    padding: 0 28px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+QPushButton#closeSettingsButton:hover {
+    background-color: @accentHover;
+    border-color: @accentHover;
+}
+
+QPushButton#closeSettingsButton:pressed {
+    background-color: @accentPressed;
+    border-color: @accentPressed;
+}
+
+/* ---------- History view ---------- */
+
+QScrollArea#historyArea {
+    background: transparent;
+    border: none;
+}
+
+QScrollArea#historyArea > QWidget > QWidget {
+    background: transparent;
+}
+
+QLabel#historyEmptyTitle {
+    color: @text;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+QLabel#historyEmptyHint {
+    color: @textMuted;
+    font-size: 13px;
+}
+
+QLabel#historyQuestion {
+    color: @text;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+QLabel#historyResultTitle {
+    color: @accent;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.0px;
+}
+
+QLabel#historyResultText {
+    color: @text;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+QLabel#historyBadgeYes {
+    color: #FFFFFF;
+    background-color: @accent;
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+QLabel#historyBadgeNo {
+    color: @textMuted;
+    background-color: @hover;
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ---------- Disabled state ---------- */
+
+QPushButton:disabled {
+    color: @textMuted;
+    background-color: @hover;
+    border-color: @border;
+}

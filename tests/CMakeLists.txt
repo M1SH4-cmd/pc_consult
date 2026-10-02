@@ -67,6 +67,7 @@ add_executable(test_consultation_session
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/HistoryEntry.h
 )
 
 target_include_directories(test_consultation_session PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
@@ -85,6 +86,7 @@ add_executable(test_integration
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/DecisionNode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeId.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/NodeKind.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/core/HistoryEntry.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../resources/resources.qrc
 )
 

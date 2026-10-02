@@ -23,18 +23,27 @@ qt_add_executable(PCConsultant
     src/main.cpp
     src/ui/MainWindow.h
     src/ui/MainWindow.cpp
+    src/ui/HistoryView.h
+    src/ui/HistoryView.cpp
     src/core/Answer.h
     src/core/ConsultationSession.h
     src/core/ConsultationSession.cpp
     src/core/DecisionNode.h
     src/core/DecisionTree.h
     src/core/DecisionTree.cpp
+    src/core/HistoryEntry.h
     src/core/NodeId.h
     src/core/NodeKind.h
     src/core/TreeDataLoader.h
     src/core/TreeDataLoader.cpp
     src/core/TreeValidator.h
     src/core/TreeValidator.cpp
+    src/settings/AppSettings.h
+    src/settings/AppSettings.cpp
+    src/settings/SettingsDialog.h
+    src/settings/SettingsDialog.cpp
+    src/settings/ThemeManager.h
+    src/settings/ThemeManager.cpp
     resources/resources.qrc
 )
 

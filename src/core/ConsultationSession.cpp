@@ -45,7 +45,12 @@ bool ConsultationSession::answer(Answer answer)
         return false;
     }
 
-    m_history.push_back(m_currentId);
+    HistoryEntry entry;
+    entry.nodeId = m_currentId;
+    entry.answer = answer;
+    entry.targetId = *target;
+    m_history.push_back(std::move(entry));
+
     m_currentId = *target;
     return true;
 }
@@ -57,7 +62,7 @@ bool ConsultationSession::goBack()
         return false;
     }
 
-    m_currentId = std::move(m_history.back());
+    m_currentId = m_history.back().nodeId;
     m_history.pop_back();
     return true;
 }

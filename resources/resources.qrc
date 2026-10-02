@@ -3,4 +3,10 @@
     <qresource prefix="/data">
         <file alias="consultant_tree.json">data/consultant_tree.json</file>
     </qresource>
+    <qresource prefix="/styles">
+        <file alias="app.qss">styles/app.qss</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="settings.svg">icons/settings.svg</file>
+    </qresource>
 </RCC>

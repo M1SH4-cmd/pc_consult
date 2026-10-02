@@ -9,6 +9,8 @@
 #include "core/DecisionTree.h"
 #include "core/TreeDataLoader.h"
 #include "core/TreeValidator.h"
+#include "settings/AppSettings.h"
+#include "settings/ThemeManager.h"
 #include "ui/MainWindow.h"
 
 namespace
@@ -33,6 +35,10 @@ int main(int argc, char* argv[])
 
     QCoreApplication::setOrganizationName(QStringLiteral("PCConsultant"));
     QCoreApplication::setApplicationName(QStringLiteral("PC Consultant"));
+
+    // Load and apply settings before creating MainWindow
+    settings::AppSettings settings = settings::AppSettings::load();
+    settings::ThemeManager::apply(settings);
 
     const core::TreeLoadResult loaded =
         core::TreeDataLoader::loadFromResource(":/data/consultant_tree.json");
@@ -63,7 +69,7 @@ int main(int argc, char* argv[])
     }
 
     core::ConsultationSession session(tree);
-    MainWindow window(session);
+    MainWindow window(session, tree, settings);
     window.show();
 
     return app.exec();
