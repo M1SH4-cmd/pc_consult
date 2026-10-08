@@ -1,5 +1,4 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/data">
         <file alias="consultant_tree.json">data/consultant_tree.json</file>
     </qresource>
@@ -8,5 +7,6 @@
     </qresource>
     <qresource prefix="/icons">
         <file alias="settings.svg">icons/settings.svg</file>
+        <file>icons/main.ico</file>
     </qresource>
 </RCC>

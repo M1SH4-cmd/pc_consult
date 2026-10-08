@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+#include "core/Answer.h"
+#include "core/NodeId.h"
+
 namespace core
 {
 class ConsultationSession;
@@ -28,8 +31,10 @@ public:
     void refresh();
 
 private:
-    void buildEmpty();
     void buildTimeline();
+    void createQuestionRow(int visualId, const core::NodeId& nodeId);
+    void createAnswerRow(int visualId, core::Answer answer);
+    void createResultRow(const core::NodeId& nodeId);
 
     const core::ConsultationSession& m_session;
     const core::DecisionTree& m_tree;

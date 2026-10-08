@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QStringList>
+#include <QIcon>
 
 #include <cstdlib>
 

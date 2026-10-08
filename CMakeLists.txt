@@ -19,7 +19,7 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.11 REQUIRED COMPONENTS Widgets Test)
 
-qt_add_executable(PCConsultant
+qt_add_executable(PCConsultant WIN32
     src/main.cpp
     src/ui/MainWindow.h
     src/ui/MainWindow.cpp
@@ -45,6 +45,7 @@ qt_add_executable(PCConsultant
     src/settings/ThemeManager.h
     src/settings/ThemeManager.cpp
     resources/resources.qrc
+    README.md
 )
 
 target_include_directories(PCConsultant PRIVATE src)
