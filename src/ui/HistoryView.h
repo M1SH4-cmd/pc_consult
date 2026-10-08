@@ -32,9 +32,9 @@ public:
 
 private:
     void buildTimeline();
-    void createQuestionRow(int visualId, const core::NodeId& nodeId);
-    void createAnswerRow(int visualId, core::Answer answer);
-    void createResultRow(const core::NodeId& nodeId);
+    void createQuestionRow(int visualId, const core::NodeId& nodeId, bool first, bool last);
+    void createAnswerRow(int visualId, core::Answer answer, bool first, bool last);
+    void createResultRow(const core::NodeId& nodeId, bool last);
 
     const core::ConsultationSession& m_session;
     const core::DecisionTree& m_tree;

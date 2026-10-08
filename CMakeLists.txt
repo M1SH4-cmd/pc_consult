@@ -25,6 +25,8 @@ qt_add_executable(PCConsultant WIN32
     src/ui/MainWindow.cpp
     src/ui/HistoryView.h
     src/ui/HistoryView.cpp
+    src/ui/HistoryConnector.h
+    src/ui/HistoryConnector.cpp
     src/core/Answer.h
     src/core/ConsultationSession.h
     src/core/ConsultationSession.cpp

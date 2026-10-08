@@ -1,7 +1,7 @@
 #include "ui/HistoryView.h"
 
-#include <QHBoxLayout>
 #include <QLabel>
+#include <QScrollArea>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -12,6 +12,7 @@
 #include "core/DecisionTree.h"
 #include "core/HistoryEntry.h"
 #include "core/NodeId.h"
+#include "ui/HistoryConnector.h"
 
 namespace
 {
@@ -43,7 +44,7 @@ HistoryView::HistoryView(const core::ConsultationSession& session,
 
     m_widget = new QWidget(this);
     m_layout = new QVBoxLayout(m_widget);
-    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setContentsMargins(8, 12, 24, 12);
     m_layout->setSpacing(0);
     setWidget(m_widget);
 
@@ -76,40 +77,42 @@ void HistoryView::buildTimeline()
         const auto& entry = hist[i];
 
         // Question: visual ID Q(i+1), text from entry.nodeId (the source question)
-        createQuestionRow(static_cast<int>(i) + 1, entry.nodeId);
+        createQuestionRow(static_cast<int>(i) + 1, entry.nodeId, i == 0, false);
 
         // Answer: visual ID A(i+1), text from entry.answer
-        createAnswerRow(static_cast<int>(i) + 1, entry.answer);
+        createAnswerRow(static_cast<int>(i) + 1, entry.answer, false, i == n - 1 && !m_session.isQuestion());
     }
 
     // Current node (after all history entries)
     if (m_session.isQuestion())
     {
         // Question Q(n+1) - current question, no answer yet
-        createQuestionRow(static_cast<int>(n) + 1, m_session.currentId());
+        createQuestionRow(static_cast<int>(n) + 1, m_session.currentId(), n == 0, true);
     }
     else if (m_session.isResult())
     {
         // Result R1
-        createResultRow(m_session.currentId());
+        createResultRow(m_session.currentId(), n == 0);
     }
 
     m_layout->addStretch(1);
 }
 
-void HistoryView::createQuestionRow(int visualId, const core::NodeId& nodeId)
+void HistoryView::createQuestionRow(int visualId, const core::NodeId& nodeId, bool first, bool last)
 {
     auto* row = new QWidget(m_widget);
     auto* rowLayout = new QHBoxLayout(row);
-    rowLayout->setContentsMargins(12, 6, 12, 6);
-    rowLayout->setSpacing(12);
+    rowLayout->setContentsMargins(0, 8, 0, 8);
+    rowLayout->setSpacing(10);
 
-    // Left: marker
-    auto* marker = new QLabel(QStringLiteral("●"), row);
-    marker->setFixedSize(16, 16);
-    marker->setAlignment(Qt::AlignCenter);
-    marker->setStyleSheet(QStringLiteral("color: #4F6BED; font-size: 12px;"));
-    rowLayout->addWidget(marker, 0, Qt::AlignTop);
+    // Left rail: connector + marker
+    auto* idLabel = new QLabel(QStringLiteral("Q%1").arg(visualId), row);
+    idLabel->setObjectName(QStringLiteral("historyItemId"));
+    idLabel->setProperty("marker", "question");
+
+    auto* connector = new HistoryConnector(HistoryConnector::Marker::Question, first, last, idLabel, row);
+    connector->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    rowLayout->addWidget(connector, 0, Qt::AlignTop);
 
     // Right: ID + text
     auto* rightCol = new QWidget(row);
@@ -117,8 +120,6 @@ void HistoryView::createQuestionRow(int visualId, const core::NodeId& nodeId)
     rightLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setSpacing(4);
 
-    auto* idLabel = new QLabel(QStringLiteral("Q%1").arg(visualId), rightCol);
-    idLabel->setObjectName(QStringLiteral("historyItemId"));
     rightLayout->addWidget(idLabel);
 
     const auto* node = m_tree.find(nodeId);
@@ -137,19 +138,21 @@ void HistoryView::createQuestionRow(int visualId, const core::NodeId& nodeId)
     m_layout->addWidget(row);
 }
 
-void HistoryView::createAnswerRow(int visualId, core::Answer answer)
+void HistoryView::createAnswerRow(int visualId, core::Answer answer, bool first, bool last)
 {
     auto* row = new QWidget(m_widget);
     auto* rowLayout = new QHBoxLayout(row);
-    rowLayout->setContentsMargins(12, 6, 12, 6);
-    rowLayout->setSpacing(12);
+    rowLayout->setContentsMargins(0, 2, 0, 2);
+    rowLayout->setSpacing(10);
 
-    // Left: marker
-    auto* marker = new QLabel(QStringLiteral("●"), row);
-    marker->setFixedSize(16, 16);
-    marker->setAlignment(Qt::AlignCenter);
-    marker->setStyleSheet(QStringLiteral("color: #A1A1AA; font-size: 10px;"));
-    rowLayout->addWidget(marker, 0, Qt::AlignTop);
+    // Left rail: connector + marker
+    auto* idLabel = new QLabel(QStringLiteral("A%1").arg(visualId), row);
+    idLabel->setObjectName(QStringLiteral("historyItemId"));
+    idLabel->setProperty("marker", "answer");
+
+    auto* connector = new HistoryConnector(HistoryConnector::Marker::Answer, first, last, idLabel, row);
+    connector->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    rowLayout->addWidget(connector, 0, Qt::AlignTop);
 
     // Right: ID + badge
     auto* rightCol = new QWidget(row);
@@ -157,8 +160,6 @@ void HistoryView::createAnswerRow(int visualId, core::Answer answer)
     rightLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setSpacing(4);
 
-    auto* idLabel = new QLabel(QStringLiteral("A%1").arg(visualId), rightCol);
-    idLabel->setObjectName(QStringLiteral("historyItemId"));
     rightLayout->addWidget(idLabel);
 
     auto* badge = new QLabel(answerBadgeText(answer), rightCol);
@@ -172,19 +173,21 @@ void HistoryView::createAnswerRow(int visualId, core::Answer answer)
     m_layout->addWidget(row);
 }
 
-void HistoryView::createResultRow(const core::NodeId& nodeId)
+void HistoryView::createResultRow(const core::NodeId& nodeId, bool first)
 {
     auto* row = new QWidget(m_widget);
     auto* rowLayout = new QHBoxLayout(row);
-    rowLayout->setContentsMargins(12, 6, 12, 6);
-    rowLayout->setSpacing(12);
+    rowLayout->setContentsMargins(0, 8, 0, 8);
+    rowLayout->setSpacing(10);
 
-    // Left: diamond marker
-    auto* marker = new QLabel(QStringLiteral("◆"), row);
-    marker->setFixedSize(16, 16);
-    marker->setAlignment(Qt::AlignCenter);
-    marker->setStyleSheet(QStringLiteral("color: #4F6BED; font-size: 11px;"));
-    rowLayout->addWidget(marker, 0, Qt::AlignTop);
+    // Left rail: connector + marker
+    auto* idLabel = new QLabel(QStringLiteral("R1"), row);
+    idLabel->setObjectName(QStringLiteral("historyItemId"));
+    idLabel->setProperty("marker", "result");
+
+    auto* connector = new HistoryConnector(HistoryConnector::Marker::Result, first, true, idLabel, row);
+    connector->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    rowLayout->addWidget(connector, 0, Qt::AlignTop);
 
     // Right: ID + title + text
     auto* rightCol = new QWidget(row);
@@ -192,8 +195,6 @@ void HistoryView::createResultRow(const core::NodeId& nodeId)
     rightLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setSpacing(4);
 
-    auto* idLabel = new QLabel(QStringLiteral("R1"), rightCol);
-    idLabel->setObjectName(QStringLiteral("historyItemId"));
     rightLayout->addWidget(idLabel);
 
     auto* resultTitle = new QLabel(QStringLiteral("РЕКОМЕНДАЦИЯ"), rightCol);
