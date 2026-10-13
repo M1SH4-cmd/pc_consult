@@ -19,7 +19,10 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.11 REQUIRED COMPONENTS Widgets Test)
 
+set(APP_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/main.ico")
+
 qt_add_executable(PCConsultant WIN32
+    "${APP_ICON}"
     src/main.cpp
     src/ui/MainWindow.h
     src/ui/MainWindow.cpp
@@ -48,6 +51,7 @@ qt_add_executable(PCConsultant WIN32
     src/settings/ThemeManager.cpp
     resources/resources.qrc
     README.md
+
 )
 
 target_include_directories(PCConsultant PRIVATE src)

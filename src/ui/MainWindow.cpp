@@ -54,7 +54,6 @@ MainWindow::MainWindow(core::ConsultationSession& session,
 {
     setObjectName(QStringLiteral("mainWindow"));
     setWindowTitle(QStringLiteral("PC Consultant"));
-    //setWindowIcon(QIcon(QStringLiteral(":/icons/main.ico")));
     setMinimumSize(700, 500);
     resize(1200, 900);
 

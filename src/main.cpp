@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
 
     QCoreApplication::setOrganizationName(QStringLiteral("PCConsultant"));
     QCoreApplication::setApplicationName(QStringLiteral("PC Consultant"));
+    app.setWindowIcon(QIcon(QStringLiteral(":/icons/glass.png")));
 
     // Load and apply settings before creating MainWindow
     settings::AppSettings settings = settings::AppSettings::load();
