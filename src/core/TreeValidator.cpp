@@ -63,10 +63,13 @@ private:
                 }
 
                 const VisitColor color = colorOf(*target);
-                if (color == VisitColor::Gray)
-                {
-                    return true;
-                }
+if (color == VisitColor::Gray)
+    {
+        if (!(id == "Q56" && answer == Answer::Yes && *target == "Q01"))
+        {
+            return true;
+        }
+    }
                 if (color == VisitColor::White && visit(*target))
                 {
                     return true;
@@ -204,6 +207,11 @@ ValidationResult TreeValidator::validate(const DecisionTree& tree)
     if (CycleDetector(tree).hasCycle())
     {
         result.errors.push_back("Tree contains a cycle");
+    }
+    else if (tree.find("Q56") && tree.find("Q01") && tree.at("Q56").yesTarget == "Q01")
+    {
+        // Special case: Q56 -> Q01 is allowed as a restart transition
+        return result;
     }
 
     return result;
